@@ -26,7 +26,7 @@ require_once '../../utils/goodsClass.php';
     if($uPoint < count($goodId)){
         $res['result'] = false;
 //        用户积分不够错误码
-        $res['status'] = 101;
+        $res['errorCode'] = 101;
         echo json_encode($res);
         return false;
     }else{
