@@ -48,8 +48,8 @@ class goodsClass{
 //      判断商品是否被购买
         $checkGood = self::checkGood($goodId);
         if(!(is_array($checkGood) ? $checkGood['res'] : $checkGood)){
-            echo $checkGood['data_id'];
-            return false;
+//            返回错误码
+            return $checkGood;
         }
         for($i=0;$i<count($goodId);$i++){
             $db->where('data_id ='.$goodId[$i]);
@@ -59,6 +59,7 @@ class goodsClass{
                 $res++;
             };
         }
+//        返回结果
         return $res == count($goodId) ? true : false ;
     }
 
@@ -87,5 +88,16 @@ class goodsClass{
           }
         }
         return true;
+    }
+
+//    获取购买的商品信息
+    public function getGoodInfo($goodId){
+        $db = self::connSql('dataCode');
+        $res = array();
+        for($i=0;$i<count($goodId);$i++){
+            $resData = $db->where('data_id = '.$goodId[$i])->find();
+            array_push($res,$resData);
+        }
+            return $res;
     }
 }

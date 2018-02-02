@@ -30,6 +30,14 @@ require_once '../../utils/goodsClass.php';
         echo json_encode($res);
         return false;
     }else{
-        $res['result'] = $good->buy_Good($goodId, $postData['userName']);
-        echo json_encode($res);
+        $res = $good->buy_Good($goodId, $postData['userName']);
+//        判断返回信息
+        if(!(is_array($res) ? $res['res'] : $res)){
+            echo json_encode($res);
+        }else{
+//          处理数据  返回数据信息
+            $res['data'] = $good->getGoodInfo($goodId);
+//          echo json_encode($res);
+            echo json_encode(true);
+        }
     }
