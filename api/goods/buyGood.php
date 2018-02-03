@@ -35,9 +35,8 @@ require_once '../../utils/goodsClass.php';
         if(!(is_array($res) ? $res['res'] : $res)){
             echo json_encode($res);
         }else{
-//          处理数据  返回数据信息
-            $res['data'] = $good->getGoodInfo($goodId);
-//          echo json_encode($res);
-            echo json_encode(true);
+//          处理数据  返回数据信息 扣除用户积分
+            $result = array('result'=>true, 'dataCode'=>$good->getGoodInfo($goodId));
+            echo json_encode($result);
         }
     }

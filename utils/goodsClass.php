@@ -47,7 +47,7 @@ class goodsClass{
         $res = 0;
 //      判断商品是否被购买
         $checkGood = self::checkGood($goodId);
-        if(!(is_array($checkGood) ? $checkGood['res'] : $checkGood)){
+        if(! (is_array($checkGood) ? $checkGood['res'] : $checkGood)){
 //            返回错误码
             return $checkGood;
         }
@@ -96,7 +96,7 @@ class goodsClass{
         $res = array();
         for($i=0;$i<count($goodId);$i++){
             $resData = $db->where('data_id = '.$goodId[$i])->find();
-            array_push($res,$resData);
+            array_push($res,$resData[0]);
         }
             return $res;
     }
