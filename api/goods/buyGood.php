@@ -7,6 +7,7 @@
  * 购买商品
  */
 require_once '../../utils/goodsClass.php';
+require_once '../../utils/exportExcel.php';
 //    获取提交的ID
     $postResult = file_get_contents("php://input");
     $postData = json_decode($postResult, true);
@@ -35,8 +36,10 @@ require_once '../../utils/goodsClass.php';
         if(!(is_array($res) ? $res['res'] : $res)){
             echo json_encode($res);
         }else{
-//          处理数据  返回数据信息 扣除用户积分
+//          处理数据  返回数据信息并下载
             $result = array('result'=>true, 'dataCode'=>$good->getGoodInfo($goodId));
+//            更新用户积分
+            $good->updatePoint($postData['userName'], $uPoint - count($goodId));
             echo json_encode($result);
         }
     }

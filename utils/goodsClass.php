@@ -100,4 +100,11 @@ class goodsClass{
         }
             return $res;
     }
+//    更新用户积分
+    public function updatePoint($userName,$newPoint) {
+        $db = self::connSql('yj_user');
+        $db->where('u_name = "'.$userName.'"');
+        $setMsg = 'u_points ='.$newPoint;
+        $db->update($setMsg);
+    }
 }

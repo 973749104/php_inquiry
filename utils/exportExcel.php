@@ -26,7 +26,7 @@ class exportExcel{
         $limit = 10000;
 //        逐行读数据
         $count = count($data);
-        for($i=0;i<$count;$i++){
+        for($i=0;$i<$count;$i++){
             if($limit == $num){
                 ob_flush();
                 flush();
@@ -36,9 +36,8 @@ class exportExcel{
             foreach ($row as $key=>$value){
                 $row[$key] = iconv('utf-8', 'GBK', $value);
             }
-            fputcsv($fp,$row);
+            return fputcsv($fp,$row);
         }
-
     }
 
 }
