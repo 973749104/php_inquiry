@@ -7,7 +7,7 @@
  * 购买商品
  */
 require_once '../../utils/goodsClass.php';
-require_once '../../utils/exportExcel.php';
+
 //    获取提交的ID
     $postResult = file_get_contents("php://input");
     $postData = json_decode($postResult, true);

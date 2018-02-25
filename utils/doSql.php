@@ -101,6 +101,7 @@ class DataBase{
         $this->options['where'] = self::options_handle($where);
         return $this;
     }
+
 //    更新语句update
     public function update($setMsg){
         $option = self::option();
@@ -109,6 +110,22 @@ class DataBase{
 //        返回影响行数
         return mysqli_affected_rows($this->dbObj);
     }
+
+//     插入新数据
+    public function insert() {
+        $fields = $this->data['fields'];
+        $values = $this->data['values'];
+        $sql = 'INSERT INTO '.$this->table.$fields.'VALUES'.$values;
+        mysqli_query($this->dbObj, $sql);
+//        返回影响行数
+        return mysqli_affected_rows($this->dbObj);
+    }
+
+//    删除数据
+    public function delete() {
+
+    }
+
 //    处理数据库返回的result
     protected function query_handle($obj){
         $res = array();
@@ -118,6 +135,7 @@ class DataBase{
         }
         return $res;
     }
+
 //    传入参数处理
     public function param_handle($param) {
         if(is_string($param) && !empty($param)){
@@ -166,6 +184,32 @@ class DataBase{
         return $option;
     }
 
+//    data数据处理
+    public function formatData(array $data) {
+        $values = array();
+        $fields = array();
+        if(is_array($data)){
+            foreach ($data as $key=>$value){
+                if(is_array($value)){   //二位数组
+                    $tip = 1;
+                    array_push($values, '('.implode(',', array_values($value)).')');
+                    array_push($fields, '('.implode(',', array_keys($value)).')');
+                }else{
+                    $tip = 0;
+                }
+            }
+        }else{
+            return false;
+        }
+
+        if(!$tip){
+            array_push($values, '('.implode(',', array_values($value)).')');
+            array_push($fields, '('.implode(',', array_keys($value)).')');
+        }
+        $this->data['fields'] = $fields[0];
+        $this->data['values'] = implode(',', $values);
+        return $this;
+    }
 //    关闭数据库
     public function closeDB() {
         $close = mysqli_close($this->dbObj);
