@@ -36,10 +36,14 @@ require_once '../../utils/goodsClass.php';
         if(!(is_array($res) ? $res['res'] : $res)){
             echo json_encode($res);
         }else{
-//          处理数据  返回数据信息并下载
-            $result = array('result'=>true, 'dataCode'=>$good->getGoodInfo($goodId));
 //            更新用户积分
-            $good->updatePoint($postData['userName'], $uPoint - count($goodId));
+            $updatePoint = $good->updatePoint($postData['userName'], $uPoint - count($goodId));
+            if($updatePoint > 0){
+//              处理数据  返回数据信息并下载
+                $result = array('result'=>true, 'dataCode'=>$good->getGoodInfo($goodId));
+            }else{
+                $result = array('result' => false);
+            }
             echo json_encode($result);
         }
     }

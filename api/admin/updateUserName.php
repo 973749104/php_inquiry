@@ -1,23 +1,19 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: RQ
- * Date: 2018/2/25
- * Time: 15:51
- * //添加用户
+ * User: LHX
+ * Date: 2018/3/1
+ * Time: 19:49
  */
 require_once '../../utils/adminClass.php';
 //获取传递的数据
 $postData = file_get_contents("php://input");
 //数据处理
 $postResult = json_decode($postData, true);
-//数值
+//数据提取
+$userId = $postResult['userId'];
 $userName = $postResult['userName'];
-$userPwd = md5($postResult['userPwd']);
-$userPoints = $postResult['userPoints'];
 
 $admin = new adminClass();
-//返回结果
-$res= $admin->addUser($userName, $userPwd, $userPoints);
-
+$res = $admin->editUserName($userId, $userName);
 echo json_encode($res);

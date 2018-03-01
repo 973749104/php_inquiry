@@ -105,6 +105,7 @@ class goodsClass{
         $db = self::connSql('yj_user');
         $db->where('u_name = "'.$userName.'"');
         $setMsg = 'u_points ='.$newPoint;
-        $db->update($setMsg);
+        $res = $db->update($setMsg);
+        return $res;
     }
 }

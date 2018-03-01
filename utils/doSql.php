@@ -39,6 +39,8 @@ class DataBase{
             $this->dbName = $dbName;
             //        连接数据库
             $dbObj = new mysqli($dbHost,$dbUserName,$dbPwd,$dbName);
+//            设置字符集
+            mysqli_set_charset($dbObj,"utf8");
             if($dbObj->connect_errno){
                 $this->error = $dbObj->connect_error;
                 return false;
@@ -115,7 +117,7 @@ class DataBase{
     public function insert() {
         $fields = $this->data['fields'];
         $values = $this->data['values'];
-        $sql = 'INSERT INTO '.$this->table.$fields.'VALUES'.$values;
+        $sql = 'INSERT INTO '.$this->table.$fields.' VALUES '.$values;
         mysqli_query($this->dbObj, $sql);
 //        返回影响行数
         return mysqli_affected_rows($this->dbObj);
@@ -123,7 +125,12 @@ class DataBase{
 
 //    删除数据
     public function delete() {
-
+        $option = self::option();
+        $sql = 'DELETE FROM '.$this->table.' WHERE '.$this->options['where'];
+//      执行SQL
+        mysqli_query($this->dbObj, $sql);
+//      返回影响行数
+        return  mysqli_affected_rows($this->dbObj);
     }
 
 //    处理数据库返回的result
@@ -190,9 +197,9 @@ class DataBase{
         $fields = array();
         if(is_array($data)){
             foreach ($data as $key=>$value){
-                if(is_array($value)){   //二位数组
+                if(is_array($value)){   //二维数组
                     $tip = 1;
-                    array_push($values, '('.implode(',', array_values($value)).')');
+                    array_push($values, '("'.implode('","', array_values($value)).'")');
                     array_push($fields, '('.implode(',', array_keys($value)).')');
                 }else{
                     $tip = 0;
@@ -203,8 +210,8 @@ class DataBase{
         }
 
         if(!$tip){
-            array_push($values, '('.implode(',', array_values($value)).')');
-            array_push($fields, '('.implode(',', array_keys($value)).')');
+            array_push($values, '("'.implode('","', array_values($data)).'")');
+            array_push($fields, '('.implode(',', array_keys($data)).')');
         }
         $this->data['fields'] = $fields[0];
         $this->data['values'] = implode(',', $values);
